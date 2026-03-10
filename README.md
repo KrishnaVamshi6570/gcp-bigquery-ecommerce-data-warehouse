@@ -10,19 +10,23 @@ The system ingests raw CSV datasets, transforms them into a **star schema wareho
 
 # Architecture
 
+Pipeline Flow:
+
+CSV Dataset → BigQuery Raw Tables → SQL Transformations → 
+Star Schema Data Warehouse → Analytics View → Looker Studio Dashboard
+
 The data pipeline follows this architecture:
 
 ![Architecture](architecture/star_schema.png)
 
-### Pipeline Steps
+## Data Pipeline
 
-1. Raw CSV dataset ingestion
-2. Data stored in BigQuery raw tables
-3. SQL transformations
-4. Star schema data warehouse
-5. Analytics view for BI tools
-6. Looker Studio dashboard visualization
-
+1. Raw CSV files are uploaded into BigQuery dataset `ecommerce_raw`.
+2. SQL transformations clean and normalize the data.
+3. A star schema data warehouse is created in `ecommerce_dwh`.
+4. Fact and dimension tables support analytical queries.
+5. An analytics view is created for BI dashboards.
+6. Looker Studio connects to BigQuery for visualization.
 ---
 
 # Technologies
@@ -62,6 +66,33 @@ The dashboard provides key business metrics:
 
 ![Dashboard](dashboard/dashboard_overview.png)
 
+---
+## Example Analytics Query
+
+Top product categories by revenue:
+
+```sql
+SELECT
+p.category,
+SUM(f.price) AS revenue
+FROM ecommerce_dwh.fact_sales f
+JOIN ecommerce_dwh.dim_products p
+ON f.product_id = p.product_id
+GROUP BY p.category
+ORDER BY revenue DESC
+LIMIT 10;
+```
+---
+---
+## Skills Demonstrated
+```markdown
+- Data Warehousing
+- Star Schema Modeling
+- SQL Transformations
+- BigQuery
+- Business Intelligence
+- Data Visualization
+```
 ---
 
 # Dataset
